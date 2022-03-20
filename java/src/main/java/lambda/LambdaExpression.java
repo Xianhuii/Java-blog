@@ -1,13 +1,16 @@
 package lambda;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * lambda表达式基本用法
  * <ol>
- *      <li>lambda表达式本质上是对匿名内部类的一种简化写法：{@link LambdaExpression#demo01()}
+ *      <li>lambda表达式本质上是对匿名内部类实例的一种简化写法：{@link LambdaExpression#demo01()}
  *      <li>lambda表达式基本语法：{@link LambdaExpression#demo02()}
  *      <li>lambda表达式的执行逻辑本质上是传递了一个匿名对象，是一种假的函数式编程：{@link LambdaExpression#demo03()}
+ *      <li>编译器会根据lambda表达式动态实现接口，并实例化出对象：{@link LambdaExpression#demo04()}
  * </ol>
  *
  * @author Xianhuii
@@ -28,7 +31,7 @@ public class LambdaExpression {
         // 方式一：创建实现类对象{@link AscComparator}
         Comparator<Integer> ascComparator = new AscComparator();
         list.sort(ascComparator);
-        // 方式二：匿名内部类
+        // 方式二：匿名对象
         Comparator<Integer> anonymousComparator = new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
@@ -258,7 +261,7 @@ public class LambdaExpression {
     /**
      * <p>lambda表达式形式上看起来很像是函数式编程：将一个函数当作形参传给方法。
      * <p>实际上，lambda表达式只是Java的一个语法糖，它本质上仍然是一个普通的Java对象。
-     * <p>在编译的过程中，lambda表达式最终还是会被编译成匿名的接口实现类对象。
+     * <p>在执行的过程中，lambda表达式最终还是会被解析成匿名的接口实现类对象。
      * <p>由于多态特性，在执行过程中，调用是外部传进来的实现类实例的代码。
      * <p>在这个过程中，我们甚至可以将该匿名对象保存起来，便于后续多次调用。
      */
@@ -298,8 +301,39 @@ public class LambdaExpression {
         R method(T t);
     }
 
+    static void demo04() {
+        LambdaExpression lambdaObjPrinter = new LambdaExpression();
+        // 案例1
+//        lambdaObjPrinter.printConsumer(o -> o.getClass());
+//        lambdaObjPrinter.printConsumer(o -> o.getClass());
+        // 案例2
+        for (int i = 0; i < 2; i++) {
+            lambdaObjPrinter.printConsumer(o -> o.getClass());
+        }
+        System.out.println("=============");
+        for (int i = 0; i < 2; i++) {
+            lambdaObjPrinter.printConsumer(o -> o.getClass());
+        }
+        System.out.println("=============");
+        int index = 0;
+        while (index < 2) {
+            lambdaObjPrinter.printConsumer(o -> o.getClass());
+            index++;
+        }
+    }
+    public void printConsumer(Consumer consumer) {
+        System.out.println(consumer.getClass());
+        System.out.println(consumer.getClass().getInterfaces()[0]);
+        System.out.println(consumer);
+    }
+
+    public void printFunction(Function function) {
+        System.out.println(function.getClass());
+    }
+
     public static void main(String[] args) {
 //        demo01();
-        demo03();
+//        demo03();
+        demo04();
     }
 }
