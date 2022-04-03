@@ -198,7 +198,7 @@ public class LambdaExpression {
     }
 
     /**
-     * 函数式接口，详细查看{@link lambda.FunctionInterface}
+     * 函数式接口，详细查看{@link FunctionalInterface}
      */
     static class FunctionInterface {
         interface AcceptEmpty {
